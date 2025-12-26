@@ -150,3 +150,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('GGLUX Landing Initialized 🚀');
 });
+// ============================================
+  // Meta Pixel Events Tracking
+  // ============================================
+
+  // Track all Telegram link clicks
+  document.addEventListener('click', function(e) {
+      const target = e.target.closest('a[href*="t.me"]');
+      if (target && typeof fbq !== 'undefined') {
+          const buttonText = target.textContent.trim();
+
+          fbq('track', 'Contact', {
+              content_name: buttonText,
+              content_category: 'Telegram Redirect',
+              value: 1.00,
+              currency: 'USD'
+          });
+
+          console.log('Meta Pixel: Contact event fired -', buttonText);
+      }
+  });
+
+  // Track category button clicks (for future catalog pages)
+  document.addEventListener('click', function(e) {
+      const target = e.target.closest('button, a');
+      if (target && typeof fbq !== 'undefined') {
+          const text = target.textContent.trim();
+
+          if (text.includes('ДЛЯ ЧОЛОВІКІВ') ||
+              text.includes('ДЛЯ ЖІНОК') ||
+              text.includes('КАТАЛОГ')) {
+
+              fbq('track', 'ViewContent', {
+                  content_name: text,
+                  content_category: 'Category Selection'
+              });
+
+              console.log('Meta Pixel: ViewContent event fired -', text);
+          }
+      }
+  });
+
+  // Track Instagram link clicks
+  document.addEventListener('click', function(e) {
+      const target = e.target.closest('a[href*="instagram.com"]');
+      if (target && typeof fbq !== 'undefined') {
+          fbq('trackCustom', 'SocialClick', {
+              platform: 'Instagram',
+              action: 'Profile Visit'
+          });
+
+          console.log('Meta Pixel: Instagram click tracked');
+      }
+  });
